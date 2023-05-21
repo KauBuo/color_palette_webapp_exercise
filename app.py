@@ -1,7 +1,7 @@
 import os
+import random
 import numpy as np  # 用于处理数组和矩阵
 import cv2  # 用于处理图像
-import random 
 from sklearn.cluster import KMeans  # 用于聚类分析
 from flask import Flask, render_template, request, jsonify  # 用于构建Web应用
 from werkzeug.utils import secure_filename  # 用于确保上传文件名的安全性
@@ -16,9 +16,9 @@ def generate_random_colors():
     # 循环5次，生成5个随机颜色
     for _ in range(5):
         # 对于红色、绿色和蓝色分量，分别生成一个随机整数，范围在0到255之间（包括0和255）
-         r = np.random.randint(0,256)
-         g = np.random.randint(0,256)
-         b = np.random.randint(0,256)
+        r = random.randint(0, 256)
+        g = random.randint(0, 256)
+        b = random.randint(0, 256)
         
         # 使用字符串格式化将红色、绿色和蓝色分量组合成一个十六进制颜色字符串
         color = '#%02x%02x%02x' % (r, g, b)
@@ -50,7 +50,6 @@ def extract_colors(image, n_colors=5):
 @app.route('/')
 def home():
     return render_template('home.html')
-
 # 定义路由和处理函数，响应POST请求
 # 当客户端向`/random_palette`发送POST请求时，此处理函数将被调用
 @app.route('/random_palette', methods=['POST'])
@@ -84,8 +83,8 @@ def upload_image():
     file.save(filepath)
 
     # 使用OpenCV读取图像文件，并将BGR颜色空间转换为RGB颜色空间
-     image = cv2.imread(filepath) # 读取图像
-     image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB) # BGR->RGB
+    image = cv2.imread(filepath) # 读取图像
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # BGR->RGB
 
 
     # ------------------------------------------------------------------------------
@@ -97,7 +96,7 @@ def upload_image():
     if crop_box_coords:
         x, y, width, height = [int(coord) for coord in crop_box_coords.split(',')]
         print("选中的尺寸是: ",x,y,width,height)
-     image = image[y:y+height,x:x+width] # 从原image中截取左上角是(x,y)，宽度为width，高度为height的区域
+        image = image[y:y+height, x:x+width] # 从原image中截取左上角是(x,y)，宽度为width，高度为height的区域
 
     # 调用extract_colors函数提取图像的代表性颜色
     palette = extract_colors(image)
